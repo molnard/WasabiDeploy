@@ -45,5 +45,28 @@ namespace WasabiDeploy
                 while (Directory.Exists(pathToDirectory));
             }
         }
+
+        public static string FindDirectoryByName(string path, string directoryName)
+        {
+            var currentDirectory = new DirectoryInfo(path);
+            do
+            {
+                if (string.Equals(currentDirectory.Name, directoryName, StringComparison.InvariantCulture))
+                {
+                    return currentDirectory.FullName;
+                }
+
+                currentDirectory = Directory.GetParent(currentDirectory.FullName);
+            }
+            while (currentDirectory.Parent is { });
+
+            return null;
+        }
+
+        public static string GetWorkingDirectory()
+        {
+            var rootDirectory = FindDirectoryByName("./", "WasabiDeploy");
+            return Path.Combine(rootDirectory, "WasabiDeploy.Temp");
+        }
     }
 }
