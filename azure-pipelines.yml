@@ -1,0 +1,23 @@
+trigger:
+  batch: true
+
+variables:
+  testConfiguration: 'Debug'
+
+jobs:
+- job: Windows
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core 3'
+    inputs:
+      version: 3.1.x
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Debug'
+    inputs:
+      projects: WasabiDeploy.Publish
+      command: run
+      arguments: --configuration Debug
+
+
