@@ -13,4 +13,8 @@ jobs:
     displayName: 'Install .NET Core 3'
     inputs:
       version: 3.1.x
-
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'run'
+      projects: 'WasabiDeploy.Publish'
+      arguments: '--configuration Release'
