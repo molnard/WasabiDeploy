@@ -16,7 +16,7 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: 'Build Debug'
     inputs:
-      projects: WasabiDeploy.Publish
+      projects: WasabiDeploy.Publish/*.csproj
       command: run
       arguments: --configuration Debug
 
