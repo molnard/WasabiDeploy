@@ -16,5 +16,5 @@ jobs:
   - task: DotNetCoreCLI@2
     inputs:
       command: 'run'
-      projects: 'WasabiDeploy.Publish'
+      projects: 'WasabiDeploy.Publish/*.csproj'
       arguments: '--configuration Release'
