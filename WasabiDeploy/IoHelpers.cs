@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,26 +47,24 @@ namespace WasabiDeploy
             }
         }
 
-        public static string FindDirectoryByName(string path, string directoryName)
+        public static string GetWorkingDirectory()
         {
-            var currentDirectory = new DirectoryInfo(path);
+            var currentDirectory = new DirectoryInfo("./");
+            FileInfo slnFile = null;
             do
             {
-                if (string.Equals(currentDirectory.Name, directoryName, StringComparison.InvariantCulture))
+                slnFile = currentDirectory.GetFiles("WasabiDeploy.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+
+                if (slnFile is { })
                 {
-                    return currentDirectory.FullName;
+                    break;
                 }
 
-                currentDirectory = Directory.GetParent(currentDirectory.FullName);
+                currentDirectory = currentDirectory.Parent;
             }
             while (currentDirectory.Parent is { });
 
-            return null;
-        }
-
-        public static string GetWorkingDirectory()
-        {
-            var rootDirectory = FindDirectoryByName("./", "WasabiDeploy");
+            var rootDirectory = slnFile.Directory.Parent.FullName;
             return Path.Combine(rootDirectory, "WasabiDeploy.Temp");
         }
     }
