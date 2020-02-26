@@ -9,6 +9,8 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   steps:
+  - checkout: https://github.com/zkSNACKs/WalletWasabi.git
+    path: WasabiDeploy.Temp\WalletWasabi
   - task: UseDotNet@2
     displayName: 'Install .NET Core 3'
     inputs:
