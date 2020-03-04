@@ -11,6 +11,11 @@ namespace WasabiDeploy.Publish
         private static async Task Main(string[] args)
         {
             var workingDirectory = IoHelpers.GetWorkingDirectory();
+            Console.WriteLine($"Working directory is: {workingDirectory}");
+            var subdirs = new DirectoryInfo(workingDirectory).GetDirectories("*", SearchOption.TopDirectoryOnly).Select(di => di.Name);
+
+            Console.WriteLine($"Subdirectories are: {string.Join(", ", subdirs)}");
+
             var wasabiRepoDirectory = Path.Combine(workingDirectory, "WalletWasabi");
             var outputDirectory = Path.Combine(workingDirectory, "Outputs");
             var guiDirectory = Path.Combine(wasabiRepoDirectory, "WalletWasabi.Gui");
