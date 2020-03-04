@@ -50,6 +50,12 @@ namespace WasabiDeploy
         public static string GetWorkingDirectory()
         {
             var currentDirectory = new DirectoryInfo("./");
+            var working = currentDirectory.GetDirectories("WasabiDeploy", SearchOption.TopDirectoryOnly).FirstOrDefault();
+            if (working is { })
+            {
+                return working.FullName;
+            }
+
             FileInfo slnFile = null;
             do
             {
