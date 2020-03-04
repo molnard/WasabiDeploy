@@ -10,6 +10,7 @@ resources:
     type: github
     name: zkSNACKs/WalletWasabi
     endpoint: github.com_molnard
+    path: WasabiDeploy.Temp
     ref: master
 
 jobs:
