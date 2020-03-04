@@ -53,6 +53,7 @@ namespace WasabiDeploy
             FileInfo slnFile = null;
             do
             {
+                Console.WriteLine($"currentdir: {currentDirectory}");
                 slnFile = currentDirectory.GetFiles("WasabiDeploy.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
 
                 if (slnFile is { })
