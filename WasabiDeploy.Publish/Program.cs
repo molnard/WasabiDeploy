@@ -14,7 +14,10 @@ namespace WasabiDeploy.Publish
             Console.WriteLine($"Working directory is: {workingDirectory}");
             var subdirs = new DirectoryInfo(workingDirectory).GetDirectories("*", SearchOption.TopDirectoryOnly).Select(di => di.Name);
 
-            Console.WriteLine($"Subdirectories are: {string.Join(", ", subdirs)}");
+            if (subdirs is { } && subdirs.Any())
+            {
+                Console.WriteLine($"Subdirectories are: {string.Join(", ", subdirs)}");
+            }
 
             var wasabiRepoDirectory = Path.Combine(workingDirectory, "WalletWasabi");
             var outputDirectory = Path.Combine(workingDirectory, "Outputs");
