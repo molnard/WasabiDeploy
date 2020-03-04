@@ -9,7 +9,7 @@ resources:
   - repository: wallet
     type: github
     name: zkSNACKs/WalletWasabi
-    endpoint: zkSNACKs
+    endpoint: github.com_molnard
     path: WasabiDeploy.Temp\WalletWasabi
 
 jobs:
