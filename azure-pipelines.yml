@@ -10,7 +10,6 @@ resources:
     type: github
     name: zkSNACKs/WalletWasabi
     endpoint: github.com_molnard
-    path: WasabiDeploy.Temp\WalletWasabi
     ref: master
 
 jobs:
@@ -19,7 +18,9 @@ jobs:
     vmImage: 'vs2017-win2016'
   steps:
   - checkout: self
+    path: WasabiDeploy
   - checkout: wallet
+    path: WasabiDeploy.Temp\WalletWasabi
   - task: UseDotNet@2
     displayName: 'Install .NET Core 3'
     inputs:
