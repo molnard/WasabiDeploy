@@ -4,13 +4,20 @@ trigger:
 variables:
   testConfiguration: 'Debug'
 
+resources:
+  repositories:
+  - repository: wallet
+    type: github
+    name: zkSNACKs/WalletWasabi
+    endpoint: zkSNACKs
+    path: WasabiDeploy.Temp\WalletWasabi
+
 jobs:
 - job: Windows
   pool:
     vmImage: 'vs2017-win2016'
   steps:
-  - checkout: github://zkSNACKs/WalletWasabi
-    path: WasabiDeploy.Temp\WalletWasabi
+  - checkout: wallet
   - task: UseDotNet@2
     displayName: 'Install .NET Core 3'
     inputs:
