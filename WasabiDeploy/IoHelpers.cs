@@ -53,7 +53,7 @@ namespace WasabiDeploy
             FileInfo slnFile = null;
             do
             {
-                Console.WriteLine($"currentdir: {currentDirectory}");
+                Console.WriteLine($"currentdir: {currentDirectory.FullName}");
                 slnFile = currentDirectory.GetFiles("WasabiDeploy.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
 
                 if (slnFile is { })
@@ -63,7 +63,7 @@ namespace WasabiDeploy
 
                 currentDirectory = currentDirectory.Parent;
             }
-            while (currentDirectory.Parent is { });
+            while (currentDirectory?.Parent is { });
 
             var rootDirectory = slnFile.Directory.Parent.FullName;
             return Path.Combine(rootDirectory, "WasabiDeploy.Temp");
