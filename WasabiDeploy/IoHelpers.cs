@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,27 +47,55 @@ namespace WasabiDeploy
             }
         }
 
-        public static string FindDirectoryByName(string path, string directoryName)
+        public static void PrintSubdirsToConsole(string path)
         {
-            var currentDirectory = new DirectoryInfo(path);
-            do
+            var subdirs = new DirectoryInfo(path).GetDirectories("*", SearchOption.TopDirectoryOnly).Select(di => di.Name);
+            Console.WriteLine($"Subdirectories of {path}");
+            Console.Write("Sub directories: ");
+            if (subdirs is { } && subdirs.Any())
             {
-                if (string.Equals(currentDirectory.Name, directoryName, StringComparison.InvariantCulture))
-                {
-                    return currentDirectory.FullName;
-                }
-
-                currentDirectory = Directory.GetParent(currentDirectory.FullName);
+                Console.WriteLine($"{string.Join(", ", subdirs)}");
             }
-            while (currentDirectory.Parent is { });
-
-            return null;
+            else
+            {
+                Console.WriteLine("None");
+            }
         }
 
-        public static string GetWorkingDirectory()
+        /// <summary>
+        /// On local machine the current directory is: C:\work\WasabiDeploy\WasabiDeploy.Publish\bin\Debug
+        /// On Azure Pipelines the current directory is: D:\a\1\s\
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBaseDirectory()
         {
-            var rootDirectory = FindDirectoryByName("./", "WasabiDeploy");
-            return Path.Combine(rootDirectory, "WasabiDeploy.Temp");
+            var scanDirectory = new DirectoryInfo("./");
+
+            var wasabiDeploy = scanDirectory.EnumerateDirectories("WasabiDeploy").FirstOrDefault();
+            // If the WasabiDeploy directory is already there.
+            if (wasabiDeploy is { })
+            {
+                scanDirectory = wasabiDeploy;
+            }
+
+            PrintSubdirsToConsole(scanDirectory.FullName);
+            FileInfo slnFile;
+            do
+            {
+                Console.WriteLine($"Looking for solution: {scanDirectory.FullName}");
+                slnFile = scanDirectory.GetFiles("WasabiDeploy.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+
+                if (slnFile is { })
+                {
+                    break;
+                }
+
+                scanDirectory = scanDirectory.Parent;
+            }
+            while (scanDirectory?.Parent is { });
+
+            var rootDirectory = slnFile.Directory.Parent.FullName;
+            return rootDirectory;
         }
     }
 }

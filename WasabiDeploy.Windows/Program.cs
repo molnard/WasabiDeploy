@@ -9,7 +9,7 @@ namespace WasabiDeploy.Windows
     {
         private static void Main(string[] args)
         {
-            var workingDirectory = IoHelpers.GetWorkingDirectory();
+            var workingDirectory = IoHelpers.GetBaseDirectory();
         }
     }
 }
