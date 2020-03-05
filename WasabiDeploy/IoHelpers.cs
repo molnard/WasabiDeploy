@@ -47,32 +47,49 @@ namespace WasabiDeploy
             }
         }
 
-        public static string GetWorkingDirectory()
+        public static void PrintSubdirsToConsole(string path)
         {
-            var currentDirectory = new DirectoryInfo("./");
-            var repodir = currentDirectory.GetDirectories("WasabiDeploy", SearchOption.TopDirectoryOnly).FirstOrDefault();
-            if (repodir is { })
+            var subdirs = new DirectoryInfo(path).GetDirectories("*", SearchOption.TopDirectoryOnly).Select(di => di.Name);
+            Console.WriteLine($"Subdirectories of {path}");
+            Console.Write("Sub directories: ");
+            if (subdirs is { } && subdirs.Any())
             {
-                currentDirectory = repodir;
+                Console.WriteLine($"{string.Join(", ", subdirs)}");
             }
+            else
+            {
+                Console.WriteLine("None");
+            }
+        }
 
-            FileInfo slnFile = null;
+        /// <summary>
+        /// On local machine the current directory is: C:\work\WasabiDeploy\WasabiDeploy.Publish\bin\Debug
+        /// On Azure Pipelines the current directory is:
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBaseDirectory()
+        {
+            var scanDirectory = new DirectoryInfo("./").Parent;
+
+            PrintSubdirsToConsole(scanDirectory.FullName);
+
+            FileInfo slnFile;
             do
             {
-                Console.WriteLine($"Looking for solution: {currentDirectory.FullName}");
-                slnFile = currentDirectory.GetFiles("WasabiDeploy.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                Console.WriteLine($"Looking for solution: {scanDirectory.FullName}");
+                slnFile = scanDirectory.GetFiles("WasabiDeploy.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
 
                 if (slnFile is { })
                 {
                     break;
                 }
 
-                currentDirectory = currentDirectory.Parent;
+                scanDirectory = scanDirectory.Parent;
             }
-            while (currentDirectory?.Parent is { });
+            while (scanDirectory?.Parent is { });
 
             var rootDirectory = slnFile.Directory.Parent.FullName;
-            return Path.Combine(rootDirectory, "WasabiDeploy.Temp");
+            return rootDirectory;
         }
     }
 }

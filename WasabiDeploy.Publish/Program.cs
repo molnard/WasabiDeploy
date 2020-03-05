@@ -8,19 +8,14 @@ namespace WasabiDeploy.Publish
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        private static async Task Main()
         {
-            var workingDirectory = IoHelpers.GetWorkingDirectory();
-            Console.WriteLine($"Working directory is: {workingDirectory}");
-            var subdirs = new DirectoryInfo(workingDirectory).GetDirectories("*", SearchOption.TopDirectoryOnly).Select(di => di.Name);
+            var baseDirectory = IoHelpers.GetBaseDirectory();
+            Console.WriteLine($"Base directory is: {baseDirectory}");
+            IoHelpers.PrintSubdirsToConsole(baseDirectory);
 
-            if (subdirs is { } && subdirs.Any())
-            {
-                Console.WriteLine($"Subdirectories are: {string.Join(", ", subdirs)}");
-            }
-
-            var wasabiRepoDirectory = Path.Combine(workingDirectory, "WalletWasabi");
-            var outputDirectory = Path.Combine(workingDirectory, "Outputs");
+            var wasabiRepoDirectory = Path.Combine(baseDirectory, "WalletWasabi");
+            var outputDirectory = Path.Combine(baseDirectory, "Outputs");
             var guiDirectory = Path.Combine(wasabiRepoDirectory, "WalletWasabi.Gui");
 
             var versionPrefix = "1.1.10.2";
@@ -29,7 +24,7 @@ namespace WasabiDeploy.Publish
             {
                 Console.WriteLine($"Cloning into {wasabiRepoDirectory}");
                 Directory.CreateDirectory(wasabiRepoDirectory);
-                await GitTools.CloneAsync("https://github.com/zkSNACKs/WalletWasabi.git", workingDirectory);
+                await GitTools.CloneAsync("https://github.com/zkSNACKs/WalletWasabi.git", baseDirectory);
             }
             else
             {
