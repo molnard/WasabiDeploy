@@ -64,15 +64,21 @@ namespace WasabiDeploy
 
         /// <summary>
         /// On local machine the current directory is: C:\work\WasabiDeploy\WasabiDeploy.Publish\bin\Debug
-        /// On Azure Pipelines the current directory is:
+        /// On Azure Pipelines the current directory is: D:\a\1\s\
         /// </summary>
         /// <returns></returns>
         public static string GetBaseDirectory()
         {
             var scanDirectory = new DirectoryInfo("./");
 
-            PrintSubdirsToConsole(scanDirectory.FullName);
+            var wasabiDeploy = scanDirectory.EnumerateDirectories("WasabiDeploy").FirstOrDefault();
+            // If the WasabiDeploy directory is already there.
+            if (wasabiDeploy is { })
+            {
+                scanDirectory = wasabiDeploy;
+            }
 
+            PrintSubdirsToConsole(scanDirectory.FullName);
             FileInfo slnFile;
             do
             {
