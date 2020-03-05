@@ -69,7 +69,7 @@ namespace WasabiDeploy
         /// <returns></returns>
         public static string GetBaseDirectory()
         {
-            var scanDirectory = new DirectoryInfo("./").Parent;
+            var scanDirectory = new DirectoryInfo("./");
 
             PrintSubdirsToConsole(scanDirectory.FullName);
 
