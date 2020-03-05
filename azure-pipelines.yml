@@ -19,7 +19,6 @@ jobs:
     vmImage: 'vs2017-win2016'
   steps:
   - checkout: self
-    path: WasabiDeploy
   - checkout: wallet
   - task: UseDotNet@2
     displayName: 'Install .NET Core 3'
